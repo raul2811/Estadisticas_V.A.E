@@ -4,8 +4,8 @@ from sqlalchemy.engine import URL
 
 url_object = URL.create(
     "mysql+pymysql",
-    username="",  
-    password="",
+    username="ojs",  
+    password="prueba123",
     host="localhost",
-    database="",
+    database="ojs",
 )
