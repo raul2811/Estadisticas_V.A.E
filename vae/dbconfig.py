@@ -1,6 +1,0 @@
-#configuracion para mysql
-MYSQL_HOST=""
-MYSQL_PORT=3306
-MYSQL_USER=""
-MYSQL_PASSWORD=""
-MYSQL_DB=""
