@@ -29,7 +29,9 @@ def consultar_tabla():
         except Exception as e:
             print(f"ocurrio un error inesperado: {e}")
             return None
-
+        finally:
+            session.close()
+            
 consultar_tabla()
             
 
