@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 from database.engine import engine
 
 # Definir la sesión y la base
-Session = sessionmaker(bind=engine) # Crear la sesión
+Session = sessionmaker(bind=engine) # Crear la sesión  # noqa: F811
 session = Session() # Crear la sesión
 Base = declarative_base() # Crear la base
 
