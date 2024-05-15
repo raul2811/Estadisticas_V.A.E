@@ -1,38 +1,43 @@
 """Welcome to Reflex! This file outlines the steps to create a basic app."""
 
 import reflex as rx
-
+from typing import List
 from rxconfig import config
-
+from database.test import Consultar ,consultar_tabla
 
 class State(rx.State):
-    """The app state."""
+    registro_list = Consultar.registro_lista
+        
+consultar_tabla() # Consultar la tabla    
 
-
+def table_row(registro_list:List[str]):
+        return rx.table.row(
+            rx.table.row_header_cell((registro_list)),
+        )
+def tabla(): # Función para crear la tabla
+        return rx.vstack(
+            rx.table.root(
+                rx.table.header(rx.table.row(
+                    rx.table.column_header_cell("path"),
+                ),
+                ),
+                rx.table.body(
+                rx.foreach(State.registro_list, table_row) # Recorrer la lista de registros y crear la tabla
+                ),
+                ),
+        )
 
 def index() -> rx.Component:
     # Welcome Page (Index)
     return rx.container(
         rx.color_mode.button(position="top-right"),
         rx.vstack(
-            rx.heading("Welcome to Reflex!", size="9"),
-            rx.text(
-                "Get started by editing ",
-                rx.code(f"{config.app_name}/{config.app_name}.py"),
-                size="5",
-            ),
-            rx.link(
-                rx.button("Check out our docs!"),
-                href="https://reflex.dev/docs/getting-started/introduction/",
-                is_external=True,
-            ),
+            tabla(),
             spacing="5",
             justify="center",
             min_height="85vh",
         ),
         rx.logo(),
     )
-
-
 app = rx.App()
 app.add_page(index)
