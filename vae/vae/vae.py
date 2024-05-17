@@ -1,4 +1,3 @@
-"""Welcome to Reflex! This file outlines the steps to create a basic app."""
 
 import reflex as rx
 from typing import List
@@ -24,7 +23,7 @@ def tabla(): # Función para crear la tabla
                 ),
         )
 
-def index(on_load=Querys_return.querys()) -> rx.Component:
+def index(on_load=Querys_return.querys()) -> rx.Component: # Función para la página de inicio , onload carga lla funcion para solicitar los datos nesesarios para el renderizado de las estadisticas 
     # Welcome Page (Index)
     return rx.container(
         rx.color_mode.button(position="top-right"),
