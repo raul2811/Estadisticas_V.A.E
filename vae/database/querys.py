@@ -3,11 +3,15 @@ from typing import List
 
 
 class Querys_return: # Clase para retornar los querys osea los resultados de cada una de la consultasks
-    total_r_journals = 0 # Variable para almacenar el total de registros
-    journals_r_content :List[str]=[] # Lista de registros de la tabla journals 
+    total_r_journals = 0 # Variable para almacenar el total de registrosuerys_return: 
+    journals_r_content :List[str]=[] # Lista de registros de la tabla journals
+    
+    
     def querys():
         Querys_return.total_registros_journal() #Llamamos a la función total_registros
         Querys_return.journals_Content() #Llamamos a la función journal_Content
+        
+        
     def total_registros_journal():
             with Session() as session:  # Crear la sesión
                 try:#intentamos
@@ -20,7 +24,9 @@ class Querys_return: # Clase para retornar los querys osea los resultados de cad
                     print(f"Ocurrió un error inesperado: {e}")
                 finally:
                     session.close()
-    def journals_Content(): # Función para consultar la tabla
+            
+                    
+    def journals_Content(): # Función para consultar la tabla joural y retornar su contenido
         while True:  # Bucle infinito
             with Session() as session:  # Crear la sesión
                 try:  # Intentar
