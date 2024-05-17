@@ -2,12 +2,11 @@
 
 import reflex as rx
 from typing import List
-from rxconfig import config
-from database.table_test import Consultar ,consultar_tabla
+from database.querys import Querys_return
 
 class State(rx.State):
-    registro_list = Consultar.registro_lista
-         
+    registro_list = Querys_return.journals_r_content
+    total_registros_count = Querys_return.total_r_journals
 def table_row(registro_list:List[str]):
         return rx.table.row(
             rx.table.row_header_cell((registro_list)),
@@ -25,7 +24,7 @@ def tabla(): # Función para crear la tabla
                 ),
         )
 
-def index(on_load=consultar_tabla()) -> rx.Component:
+def index(on_load=Querys_return.querys()) -> rx.Component:
     # Welcome Page (Index)
     return rx.container(
         rx.color_mode.button(position="top-right"),
