@@ -1,0 +1,15 @@
+{
+    "folders": [
+        {
+            "path": "."
+        }
+    ],
+    "extensions": {
+        "recommendations": [
+            "oderwat.indent-rainbow",
+            "aaron-bond.better-comments",
+            "njpwerner.autodocstring",
+            "usernamehw.errorlens"
+        ]
+    }
+}
