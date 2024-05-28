@@ -4,7 +4,7 @@ from .table_render import tabla
 from database.querys import Querys_return
 
 
-#! Agregar este argumente en caso de querer usar los datos de la base de datos on_load=Querys_return.querys()
+#! agregar este argumente en caso de querer usar los datos de la base de datos on_load=Querys_return.querys()
 def index(on_load=Querys_return.querys()) -> rx.Component: # Función para la página de inicio , onload carga lla funcion para solicitar los datos nesesarios para el renderizado de las estadisticas 
     # Welcome Page (Index)
     return rx.container(
