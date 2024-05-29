@@ -1,4 +1,3 @@
-
 import reflex as rx
 from .table_render import tabla
 from database.querys import Querys_return
