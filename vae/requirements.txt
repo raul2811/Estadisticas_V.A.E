@@ -1,2 +1,5 @@
-reflex==0.5.0
+reflex
 pymysql
+sshtunnel
+sqlalchemy
+pydantic
