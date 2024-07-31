@@ -24,5 +24,6 @@ Este proyecto integra un apartado de estadísticas para [revistas de la universi
 
 - La tabla 'issue_setting' contiene la información correspondiente a cada uno de los artículos, como el tomo de la revista, la fecha de publicación, etc.
 
-
+### Observaciones
+- Se crearon procedimientos almacenados para simplificar las consultas a la base de datos , ejecutando de manera automatica la actualizacion de las tablas utilizadas para los distintos graficos y consultando vistas de estas tablas no las tablas directamente por seguridad.
 
