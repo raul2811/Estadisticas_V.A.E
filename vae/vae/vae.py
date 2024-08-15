@@ -1,13 +1,18 @@
 import reflex as rx
-from database.querys import Querys_return
+from states.totals import Totals
 
 
-#! agregar este argumente en caso de querer usar los datos de la base de datos on_load=Querys_return.querys()
-def index(on_load=Querys_return.querys()) -> rx.Component: # Función para la página de inicio , onload carga lla funcion para solicitar los datos nesesarios para el renderizado de las estadisticas 
-    # Welcome Page (Index)
+def index() -> rx.Component: # Función para la página de inicio
     return rx.container(
-        rx.color_mode.button(position="top-right"),
-    )
+        rx.text(Totals.journals_total),
+        rx.text(Totals.volumen_total),
+        rx.text(Totals.arti_ess_total),
+        rx.text(Totals.users_total),
+        rx.text(Totals.users_pa_total),
+        rx.text(Totals.users_ext_total),
+        rx.text(Totals.downloads_total),
+        rx.color_mode.button(position="top-right"))
 
+# Se crea una instancia de la clase App y se añade la página index
 app = rx.App()
 app.add_page(index)
