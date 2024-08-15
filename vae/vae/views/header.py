@@ -1,6 +1,10 @@
 import reflex as rx
+import vae.constants as constants
+
 from reflex import desktop_only
 from vae.styles.styles import Size, BackgroundColor, TextColor
+from vae.components.link_icon import facultades, universidades, redes
+
 
 # Definicion de datos ficticios esto debe ser eliminado en la version final
 data_usuarios = [
@@ -12,6 +16,11 @@ data_usuarios = [
     {"name": "Page F", "uv": 2390, "pv": 3800, "amt": 2500},
     {"name": "Page G", "uv": 3490, "pv": 4300, "amt": 2100},
 ]
+
+class TypingState(rx.State):
+    def start_typing(self):
+        return rx.call_script("startTypingEffect()")
+
 
 # Ejemplo sacado de la pagina de reflex
 def line_simple_usuarios():
@@ -40,52 +49,88 @@ def header() -> rx.Component:
                         ),
                         rx.text(
                             "Estadística de Revistas y Artículos Científicos",
-                            font_size=Size.EXTRA_HUGE.value,
+                            font_size=Size.HUGE.value,
                             font_weight="bold"
                         ),
                         justify="center"
                     ),
-                    flex="1",
-                    margin_right="1vw"
+                    class_name="flex-1 mr-[1vw]"
                 ),
                 rx.box(
                     rx.vstack(
                         rx.text(
-                            "Bienvenidos a la página de estadísticas de revistas y artículos científicos. Aquí puedes encontrar información sobre el número de revistas y artículos por provincia, así como estadísticas por área de conocimiento.",
+                            "Bienvenidos a la página de estadísticas de revistas y artículos científicos. Este portal te ofrece una visión completa del impacto de nuestras publicaciones, incluyendo información sobre el número de usuarios registrados, la cantidad de artículos disponibles, y estadísticas detalladas de descargas.",
                             font_size=Size.EXTRA_DEFAULT.value,
                         ),
-                        rx.hstack(
-                            rx.input(
-                                placeholder="Buscar revistas y artículos...",
-                                type="search",
-                                font_size=Size.EXTRA_DEFAULT.value,
-                                margin_top=Size.MEDIUM.value,
-                                width="70%",
-                                height="2.5em",
-                                border_radius="0.5em",
-                                style={"padding-left": "0.5em"}
-                            ),
-                            rx.button(
-                                "Buscar",
-                                font_size=Size.EXTRA_DEFAULT.value,
-                                color=TextColor.WHITE.value,
-                                bg=BackgroundColor.AZUL.value,
-                                border_radius="1.5em",
-                                width="15%",
-                                height="2.5em",
-                                margin_top=Size.MEDIUM.value,
-                                margin_left="0.5em"
-                            ),
-                            width="100%",
+                        # Esta parte proximamente sera eliminada y se cambiara por un componente react (Es que ya se veia muy simple y me estaba dando una embolia visual)
+                        rx.html(
+                            """
+                            <div id="typing-container" style="font-size: {}; font-weight: bold; margin-top: {}; color: {}; white-space: nowrap;">
+                                <span id="typing-text"></span><span id="cursor" style="visibility: visible;">|</span>
+                            </div>
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            <script>
+                                function startTypingEffect() {{
+                                    const sentences = [
+                                        "Más de 40 usuarios diarios confían en nuestra plataforma.",
+                                        "Superamos las 400 descargas de artículos científicos.",
+                                        "Apoyando la investigación nacional y extranjera.",
+                                        "Facilitando el acceso a datos científicos de calidad.",
+                                        "Promoviendo la difusión del conocimiento en Panamá."
+                                    ];
+                                    let currentSentence = 0;
+                                    let currentChar = 0;
+                                    let isTyping = true;
+
+                                    function typeChar() {{
+                                        if (currentChar < sentences[currentSentence].length) {{
+                                            $("#typing-text").text(function(_, text) {{
+                                                return text + sentences[currentSentence][currentChar];
+                                            }});
+                                            currentChar++;
+                                            setTimeout(typeChar, 50);
+                                        }} else if (isTyping) {{
+                                            isTyping = false;
+                                            setTimeout(eraseChar, 2000);
+                                        }}
+                                    }}
+
+                                    function eraseChar() {{
+                                        if (currentChar > 0) {{
+                                            $("#typing-text").text(function(_, text) {{
+                                                return text.slice(0, -1);
+                                            }});
+                                            currentChar--;
+                                            setTimeout(eraseChar, 20);
+                                        }} else {{
+                                            isTyping = true;
+                                            currentSentence = (currentSentence + 1) % sentences.length;
+                                            setTimeout(typeChar, 500);
+                                        }}
+                                    }}
+
+                                    function toggleCursor() {{
+                                        $("#cursor").css("visibility", function(_, visibility) {{
+                                            return visibility === 'visible' ? 'hidden' : 'visible';
+                                        }});
+                                    }}
+
+                                    setInterval(toggleCursor, 500);
+                                    typeChar();
+                                }}
+                                $(document).ready(function() {{
+                                    startTypingEffect();
+                                }});
+                            </script>
+                            """,
+                            margin_top=Size.BIG.value,
                         ),
                         rx.text(
-                        "Explora nuestras estadísticas al instante. Ingresa un término clave y descubre datos fascinantes con un solo clic.",
-                        margin_top=Size.SMALL.value,
-                        class_name="wave-hand",
-),
+                            "Descubre los últimos avances científicos y cómo impactan en nuestra comunidad.",
+                            margin_top=Size.SMALL.value,
+                        ),
                     ),
-                    flex="1",
-                    margin_left="1vw"
+                    class_name="flex-1 mr-[1vw]"
                 ),
             ),
             bg=BackgroundColor.DEFAULT.value,
@@ -100,52 +145,41 @@ def header() -> rx.Component:
                     rx.text(
                         "Revistas y Artículos Científicos Destacados",
                         font_size=Size.EXTRA_BIG.value,
-                        font_weight="bold",
-                        width="30%",
-                        text_align="center"
+                        class_name="font-bold w-[30%] text-center"
                     ),
                     rx.text(
                         "Las revistas y artículos más descargados en la pagina oficial",
                         font_size=Size.EXTRA_DEFAULT.value,
-                        width="30%",
-                        text_align="center"
+                        class_name="w-[30%] text-center"
                     ),
-                    align_items="center",
-                    width="100%"
+                    class_name="items-center w-full"
                 ),
-                display="flex",
-                width="100%"
+                class_name="flex w-full"
             ),
 
             #Aqui estan los espacios 
             rx.hstack(
                 rx.box(
-                    width="20%",
-                    height="350px",
+                    class_name="w-[20%] h-[350px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
                 rx.box(
-                    width="20%",
-                    height="350px",
+                    class_name="w-[20%] h-[350px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
                 rx.box(
-                    width="20%",
-                    height="350px",
+                    class_name="w-[20%] h-[350px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
                 rx.box(
-                    width="20%",
-                    height="350px",
+                    class_name="w-[20%] h-[350px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
-                justify_content="center",
-                align_items="center",
-                width="100%",
+                class_name="justify-center items-center w-full",
                 margin_top=Size.EXTRA_BIG.value,
             ),
             padding_y=Size.GIGANTIC.value,
@@ -159,33 +193,24 @@ def header() -> rx.Component:
                     rx.text(
                         "Nuestra Comunidad Global en Crecimiento",
                         font_size=Size.EXTRA_BIG.value,
-                        font_weight="bold",
-                        width="80%",
-                        text_align="center"
+                        class_name="font-bold w-[80%] text-center"
                     ),
                     rx.text(
                         "Descubre el impacto internacional de nuestra plataforma. Cada número representa una mente curiosa, un investigador apasionado, un profesional comprometido. ¿Te unes a nuestra red de conocimiento en expansión?",
                         font_size=Size.EXTRA_DEFAULT.value,
-                        width="80%",
-                        text_align="center"
+                        class_name="w-[80%] text-center"
                     ),
                     rx.button(
                         "Quiero ver más",
                         font_size=Size.EXTRA_DEFAULT.value,
                         color=TextColor.WHITE.value,
                         bg=BackgroundColor.AZUL.value,
-                        border_radius="1.5em",
-                        width="20%",
-                        height="2.5em",
+                        class_name="rounded-[1.5em] w-[20%] h-[2.5em] mt-[valor]",
                         margin_top=Size.MEDIUM.value,
-                        margin_left="0.5em"
                     ),
-                    align_items="center",
-                    width="100%"
+                    class_name="items-center w-full"
                 ),
-                display="flex",
-                width="50%",
-                margin_right="5vw"
+                class_name="flex w-[50%] mr-[5vw]"
             ),
             rx.box(
                 line_simple_usuarios(),
@@ -194,8 +219,7 @@ def header() -> rx.Component:
                 width="50%",
                 margin_top=Size.EXTRA_BIG.value,
             ),
-            justify_content="center",
-            align_items="center",
+            class_name="justify-center items-center",
             padding_x=Size.EXTRA_SMALL.value,
             padding_y=Size.GIGANTIC.value,
             bg=BackgroundColor.DEFAULT.value,
@@ -214,35 +238,28 @@ def header() -> rx.Component:
             rx.box(
                 rx.vstack(
                     rx.text(
-                        "Uniendo Mentes: Del Local al Global",
+                        "El Impacto Medido en Clicks",
                         font_size=Size.EXTRA_BIG.value,
-                        font_weight="bold",
-                        width="80%",
-                        text_align="center"
+                        class_name="font-bold w-[80%] text-center",
                     ),
                     rx.text(
-                        "Explora la diversidad de nuestra comunidad académica. Desde investigadores locales hasta colaboradores internacionales, cada miembro aporta una perspectiva única. Descubre cómo el conocimiento trasciende fronteras en nuestra plataforma. ¿Listo para ser parte de este intercambio global de ideas?",
+                        "Visualiza la sed de conocimiento en tiempo real. Cada descarga es una idea compartida, un concepto explorado, una innovación en potencia. ¿Qué artículo inspirará tu próximo gran avance?",
                         font_size=Size.EXTRA_DEFAULT.value,
-                        width="80%",
-                        text_align="center"
+                        class_name="w-[80%] text-center",
                     ),
                     rx.button(
                         "Quiero ver más",
                         font_size=Size.EXTRA_DEFAULT.value,
                         color=TextColor.WHITE.value,
                         bg=BackgroundColor.AZUL.value,
-                        border_radius="1.5em",
-                        width="20%",
-                        height="2.5em",
                         margin_top=Size.MEDIUM.value,
-                        margin_left="0.5em"
+                        class_name="rounded-[1.5em] w-[20%] h-[2.5em] ml-[0.5em]"
                     ),
-                    align_items="center",
-                    width="100%"
+                    class_name="items-center w-full"
                 ),
                 display="flex",
                 width="50%",
-                margin_right="5vw"
+                margin_right="1vw"
             ),
             justify_content="center",
             align_items="center",
@@ -259,106 +276,505 @@ def header() -> rx.Component:
                     rx.text(
                         "Lo último en revistas, articulos, etc.",
                         font_size=Size.EXTRA_BIG.value,
-                        font_weight="bold",
-                        width="30%",
-                        text_align="center"
+                        class_name="font-bold w-[30%] text-center",
                     ),
                     rx.text(
                         "Descubre las últimas publicaciones en nuestra plataforma. Encuentra información actualizada sobre revistas, artículos, investigaciones y mucho más.",
                         font_size=Size.EXTRA_DEFAULT.value,
-                        width="30%",
-                        text_align="center"
+                        margin_top=Size.SMALL.value,
+                        class_name="w-[40%] text-center",
                     ),
-                    align_items="center",
-                    width="100%"
+                    class_name="items-center w-full"
                 ),
-                display="flex",
-                width="100%"
+                class_name="flex w-full"
             ),
             rx.hstack(
                 rx.box(
-                    width="20%",
-                    height="350px",
+                    class_name="w-[20%] h-[350px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
                 rx.box(
-                    width="20%",
-                    height="350px",
+                    class_name="w-[20%] h-[350px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
                 rx.box(
-                    width="20%",
-                    height="350px",
+                    class_name="w-[20%] h-[350px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
                 rx.box(
-                    width="20%",
-                    height="350px",
+                    class_name="w-[20%] h-[350px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
-                justify_content="center",
-                align_items="center",
-                width="100%",
+                class_name="justify-center items-center w-full",
                 margin_top=Size.EXTRA_BIG.value,
             ),
             padding_y=Size.GIGANTIC.value,
             bg=f"{BackgroundColor.PATTERN_URL.value}, {BackgroundColor.GRADIENT.value}"
         ),
 
-
-        # En esta parte la grafica se basa en las descargas generales que hay en la plataforma 
-        rx.hstack(
-            rx.box(
-                line_simple_usuarios(),
-                justify_content="center",
-                align_items="center",
-                width="50%",
-                margin_left="5vw",
-                margin_top=Size.EXTRA_BIG.value,
-            ),
+        # En esta parte se espera que coloquen las facultades de la universidad de panama y que al darle click a una te lleve a la pagina de la facultad
+        rx.vstack(
             rx.box(
                 rx.vstack(
                     rx.text(
-                        "El Impacto Medido en Clics",
+                        "Explora las contribuciones más recientes de nuestras facultades. Accede a publicaciones y estudios innovadores de diversas áreas académicas.",
+                        font_size=Size.EXTRA_DEFAULT.value,
+                        margin_top=Size.SMALL.value,
+                        class_name="w-[50%] text-center"
+                    ),
+                    class_name="items-center w-full"
+                ),
+                class_name="flex w-full"
+            ),
+            rx.hstack(
+                facultades(
+                    "humanidades.svg",
+                    constants.HUMANIDADES_URL
+                ),
+                 facultades(
+                    "derecho.png",
+                    constants.DERECHO_URL
+                ),
+                facultades(
+                    "exactas.webp",
+                    constants.CIENCIAS_URL
+                ),
+                 facultades(
+                    "artes.svg",
+                    constants.BELLAS_ARTES_URL
+                ),
+                facultades(
+                    "economia.png",
+                    constants.ECONOMIA_URL
+                ),
+                 facultades(
+                    "fiec.png",
+                    constants.FIEC_URL
+                ),
+                class_name="justify-center items-center w-full",
+                margin_top=Size.MEDIUM.value,
+            ),
+            padding_y=Size.GIGANTIC.value,
+            bg=BackgroundColor.DEFAULT.value,
+        ),
+
+        # Esta es la primera seccion de estadisticas de usuarios se espera que se muestre el total de usuarios nacionales, extranjeros y otro dato que puedan sacar
+         rx.vstack(
+            rx.box(
+                rx.vstack(
+                    rx.text(
+                        "Nacionales vs Extranjeros",
                         font_size=Size.EXTRA_BIG.value,
-                        font_weight="bold",
-                        width="80%",
-                        text_align="center"
+                        class_name="font-bold w-2/5 text-center"
                     ),
                     rx.text(
-                        "Visualiza la sed de conocimiento en tiempo real. Cada descarga es una idea compartida, un concepto explorado, una innovación en potencia. ¿Qué artículo inspirará tu próximo gran avance?",
+                        "Explora la dinámica de nuestra comunidad de usuarios con un desglose detallado del total de registros. Descubre cuántos usuarios son locales y cuántos provienen de otros países, ofreciendo una perspectiva clara sobre el alcance global de nuestras publicaciones.",
                         font_size=Size.EXTRA_DEFAULT.value,
-                        width="80%",
-                        text_align="center"
-                    ),
-                    rx.button(
-                        "Quiero ver más",
-                        font_size=Size.EXTRA_DEFAULT.value,
-                        color=TextColor.WHITE.value,
-                        bg=BackgroundColor.AZUL.value,
-                        border_radius="1.5em",
-                        width="20%",
-                        height="2.5em",
-                        margin_top=Size.MEDIUM.value,
-                        margin_left="0.5em"
+                        class_name="w-2/5 text-center",
+                        margin_top=Size.SMALL.value
                     ),
                     align_items="center",
                     width="100%"
                 ),
                 display="flex",
-                width="50%",
-                margin_right="5vw"
+                width="100%"
+                ),
+                rx.hstack(
+                    rx.vstack(
+                        rx.image(
+                            src="varios.svg",
+                            alt="Imagen de la seccion de usuarios",
+                            width=Size.EXTRA_BIG.value,
+                            height=Size.EXTRA_BIG.value,
+                        ),
+                        rx.text(
+                            "0",
+                            font_size=Size.EXTRA_BIG.value,
+                            font_weight="bold",
+                        ),
+                        rx.text(
+                            "Usuarios Nacionales",
+                            font_size=Size.EXTRA_DEFAULT.value,
+                            font_weight="bold",
+                        ),
+                        class_name="flex items-center justify-center w-1/5 h-[350px]",
+                        bg=BackgroundColor.CAJAS.value,
+                        spacing=Size.BIG.value  
+                    ),
+                    rx.vstack(
+                        rx.image(
+                            src="varios.svg",
+                            alt="Imagen de la seccion de usuarios",
+                            width=Size.EXTRA_BIG.value,
+                            height=Size.EXTRA_BIG.value,
+                        ),
+                        rx.text(
+                            "0",
+                            font_size=Size.EXTRA_BIG.value,
+                            font_weight="bold",
+                        ),
+                        rx.text(
+                            "Usuarios Totales",
+                            font_size=Size.EXTRA_DEFAULT.value,
+                            font_weight="bold",
+                        ),
+                        class_name="flex items-center justify-center w-1/5 h-[350px]",
+                        bg=BackgroundColor.CAJAS.value,
+                        spacing=Size.BIG.value  
+                    ),
+                    rx.vstack(
+                        rx.image(
+                            src="varios.svg",
+                            alt="Imagen de la seccion de usuarios",
+                            width=Size.EXTRA_BIG.value,
+                            height=Size.EXTRA_BIG.value,
+                        ),
+                        rx.text(
+                            "0",
+                            font_size=Size.EXTRA_BIG.value,
+                            font_weight="bold",
+                        ),
+                        rx.text(
+                            "Usuarios Extranjeros",
+                            font_size=Size.EXTRA_DEFAULT.value,
+                            font_weight="bold",
+                        ),
+                        class_name="flex items-center justify-center w-1/5 h-[350px]",
+                        bg=BackgroundColor.CAJAS.value,
+                        spacing=Size.BIG.value  
+                    ),
+                    rx.vstack(
+                            rx.image(
+                                src="varios.svg",
+                                alt="Imagen de la seccion de usuarios",
+                                width=Size.EXTRA_BIG.value,
+                                height=Size.EXTRA_BIG.value,
+                            ),
+                            rx.text(
+                                "0",
+                                font_size=Size.EXTRA_BIG.value,
+                                font_weight="bold",
+                            ),
+                            rx.text(
+                                "Otro dato que puedan sacar xd",
+                                font_size=Size.EXTRA_DEFAULT.value,
+                                font_weight="bold",
+                            ),
+                            class_name="flex items-center justify-center w-1/5 h-[350px]",
+                            bg=BackgroundColor.CAJAS.value,
+                            spacing=Size.BIG.value  
+                        ),
+                        class_name="justify-center items-center w-full",
+                        margin_top=Size.EXTRA_BIG.value,
+                    ),
+                    padding_y=Size.GIGANTIC.value,
+                    bg=f"{BackgroundColor.PATTERN_URL.value}, {BackgroundColor.GRADIENT.value}"
+                ),
+
+            # En esta parte se colocan las universidades aliadas de la universidad de panama
+            rx.vstack(
+                rx.box(
+                    rx.vstack(
+                        rx.text(
+                            "Nuestra Universidad se enorgullece de colaborar con una red selecta de universidades aliadas, reconocidas por su excelencia académica y su compromiso con la investigación de vanguardia. Estas alianzas nos permiten ofrecer un contenido enriquecido y diverso, garantizando que nuestros usuarios tengan acceso a investigaciones y publicaciones de alto impacto, provenientes de instituciones educativas líderes a nivel global.",
+                            font_size=Size.EXTRA_DEFAULT.value,
+                            margin_top=Size.SMALL.value,
+                            class_name="w-[50%] text-center"
+                        ),
+                        class_name="items-center w-full"
+                    ),
+                    class_name="flex w-full"
+                ),
+                rx.hstack(
+                    universidades(
+                        "utp.png",
+                        constants.UTP_URL
+                    ),
+                    universidades(
+                        "uplogo.png",
+                        constants.UNIVERSIDAD_URL
+                    ),
+                    class_name="justify-center items-center w-full",
+                    margin_top=Size.MEDIUM.value,
+                ),
+                padding_y=Size.GIGANTIC.value,
+                bg=BackgroundColor.DEFAULT.value,
             ),
-            justify_content="center",
-            align_items="center",
-            padding_x=Size.EXTRA_SMALL.value,
+
+
+        # En esta parte se espera que coloquen las estadisticas de las revistas activas, volumenes y articulos disponibles
+        rx.vstack(
+            rx.box(
+                rx.vstack(
+                    rx.text(
+                        "Catálogo de Publicaciones y Artículos Disponibles",
+                        font_size=Size.EXTRA_BIG.value,
+                        class_name="font-bold w-2/5 text-center"
+                    ),
+                    rx.text(
+                        "Conoce el panorama completo de nuestro contenido académico: desde el número de revistas activas hasta los volúmenes disponibles. Aquí encontrarás un resumen detallado de la cantidad de artículos y ensayos, destacando la variedad y profundidad de los temas cubiertos en nuestra plataforma.",
+                        font_size=Size.EXTRA_DEFAULT.value,
+                        class_name="w-2/5 text-center",
+                        margin_top=Size.SMALL.value
+                    ),
+                    align_items="center",
+                    width="100%"
+                ),
+                display="flex",
+                width="100%"
+                ),
+                rx.hstack(
+                    rx.vstack(
+                        rx.image(
+                           src="trending.svg",
+                            alt="Imagen de la seccion de revistas",
+                            width=Size.EXTRA_BIG.value,
+                            height=Size.EXTRA_BIG.value,
+                        ),
+                        rx.text(
+                            "0",
+                            font_size=Size.EXTRA_BIG.value,
+                            font_weight="bold",
+                        ),
+                        rx.text(
+                            "Revistas Activas",
+                            font_size=Size.EXTRA_DEFAULT.value,
+                            font_weight="bold",
+                        ),
+                        class_name="flex items-center justify-center w-1/5 h-[350px]",
+                        bg=BackgroundColor.CAJAS.value,
+                        spacing=Size.BIG.value  
+                    ),
+                    rx.vstack(
+                        rx.image(
+                            src="trending.svg",
+                            alt="Imagen de la seccion de revistas",
+                            width=Size.EXTRA_BIG.value,
+                            height=Size.EXTRA_BIG.value,
+                        ),
+                        rx.text(
+                            "0",
+                            font_size=Size.EXTRA_BIG.value,
+                            font_weight="bold",
+                        ),
+                        rx.text(
+                            "Número total de volumenes de revistas",
+                            font_size=Size.EXTRA_DEFAULT.value,
+                            font_weight="bold",
+                        ),
+                        class_name="flex items-center justify-center w-1/5 h-[350px]",
+                        bg=BackgroundColor.CAJAS.value,
+                        spacing=Size.BIG.value  
+                    ),
+                    rx.vstack(
+                        rx.image(
+                            src="trending.svg",
+                            alt="Imagen de la seccion de revistas",
+                            width=Size.EXTRA_BIG.value,
+                            height=Size.EXTRA_BIG.value,
+                        ),
+                        rx.text(
+                            "0",
+                            font_size=Size.EXTRA_BIG.value,
+                            font_weight="bold",
+                        ),
+                        rx.text(
+                            "Número total de artículos y ensayos",
+                            font_size=Size.EXTRA_DEFAULT.value,
+                            font_weight="bold",
+                        ),
+                        class_name="flex items-center justify-center w-1/5 h-[350px]",
+                        bg=BackgroundColor.CAJAS.value,
+                        spacing=Size.BIG.value  
+                    ),
+                rx.vstack(
+                        rx.image(
+                            src="trending.svg",
+                            alt="Imagen de la seccion de revistas",
+                            width=Size.EXTRA_BIG.value,
+                            height=Size.EXTRA_BIG.value,
+                        ),
+                        rx.text(
+                            "0",
+                            font_size=Size.EXTRA_BIG.value,
+                            font_weight="bold",
+                        ),
+                        rx.text(
+                            "Otro dato que puedan sacar xd",
+                            font_size=Size.EXTRA_DEFAULT.value,
+                            font_weight="bold",
+                        ),
+                        class_name="flex items-center justify-center w-1/5 h-[350px]",
+                        bg=BackgroundColor.CAJAS.value,
+                        spacing=Size.BIG.value  
+                    ),
+                    class_name="justify-center items-center w-full",
+                    margin_top=Size.EXTRA_BIG.value,
+                ),
+                padding_y=Size.GIGANTIC.value,
+                bg=f"{BackgroundColor.PATTERN_URL.value}, {BackgroundColor.GRADIENT.value}"
+            ),
+
+            # Esta es una seccion de cortina de las redes sociales 
+            rx.vstack(
+            rx.box(
+                rx.vstack(
+                    rx.text(
+                        "¡Mantente al día con las últimas noticias, eventos y oportunidades académicas! Sigue las redes sociales oficiales de nuestra universidad y de la vicerrectoría de asuntos académicos. Encontrarás información valiosa sobre programas, investigaciones, becas y mucho más. Búscanos en Facebook, X , Instagram y otras plataformas populares. ¡Conéctate con nosotros y forma parte de una comunidad académica vibrante!",
+                        font_size=Size.EXTRA_DEFAULT.value,
+                        margin_top=Size.SMALL.value,
+                        class_name="w-[50%] text-center"
+                    ),
+                    class_name="items-center w-full"
+                ),
+                class_name="flex w-full"
+            ),
+            rx.hstack(
+                redes(
+                    "youtube.svg",
+                    constants.UTP_URL
+                ),
+                redes(
+                    "instagram.svg",
+                    constants.UNIVERSIDAD_URL
+                ),
+                redes(
+                    "twitter.svg",
+                    constants.UNIVERSIDAD_URL
+                ),
+                redes(
+                    "facebook.svg",
+                    constants.UNIVERSIDAD_URL
+                ),
+                class_name="justify-center items-center w-full",
+                margin_top=Size.MEDIUM.value,
+            ),
             padding_y=Size.GIGANTIC.value,
             bg=BackgroundColor.DEFAULT.value,
-        ), 
+        ),
+
+        # Esta en la tercer seccion de estadisticas donde ira el numero total de descargas, descargas por dia, descargas menusales
+         rx.vstack(
+            rx.box(
+                rx.vstack(
+                    rx.text(
+                        "Actividad de Descargas y Publicaciones Populares",
+                        font_size=Size.EXTRA_BIG.value,
+                        class_name="font-bold w-2/5 text-center"
+                    ),
+                    rx.text(
+                        "En esta sección, se detallan las métricas de descargas de la plataforma, destacando tanto las descargas diarias como las mensuales. Además, se identifican las revistas más populares en términos de descargas, proporcionando información clave sobre el interés de los usuarios en los contenidos ofrecidos.",
+                        font_size=Size.EXTRA_DEFAULT.value,
+                        class_name="w-2/5 text-center",
+                        margin_top=Size.SMALL.value
+                    ),
+                    align_items="center",
+                    width="100%"
+                ),
+                display="flex",
+                width="100%"
+                ),
+                rx.hstack(
+                    rx.vstack(
+                        rx.image(
+                            src="descargas.svg",
+                            alt="Imagen de la seccion de descargas",
+                            width=Size.EXTRA_BIG.value,
+                            height=Size.EXTRA_BIG.value,
+                        ),
+                        rx.text(
+                            "0",
+                            font_size=Size.EXTRA_BIG.value,
+                            font_weight="bold",
+                        ),
+                        rx.text(
+                            "Número total de descargas",
+                            font_size=Size.EXTRA_DEFAULT.value,
+                            font_weight="bold",
+                        ),
+                        class_name="flex items-center justify-center w-1/5 h-[350px]",
+                        bg=BackgroundColor.CAJAS.value,
+                        spacing=Size.BIG.value  
+                    ),
+                    rx.vstack(
+                        rx.image(
+                            src="descargas.svg",
+                            alt="Imagen de la seccion de descargas",
+                            width=Size.EXTRA_BIG.value,
+                            height=Size.EXTRA_BIG.value,
+                        ),
+                        rx.text(
+                            "0",
+                            font_size=Size.EXTRA_BIG.value,
+                            font_weight="bold",
+                        ),
+                        rx.text(
+                            "Número de descargas por día",
+                            font_size=Size.EXTRA_DEFAULT.value,
+                            font_weight="bold",
+                        ),
+                        class_name="flex items-center justify-center w-1/5 h-[350px]",
+                        bg=BackgroundColor.CAJAS.value,
+                        spacing=Size.BIG.value  
+                    ),
+                    rx.vstack(
+                        rx.image(
+                            src="descargas.svg",
+                            alt="Imagen de la seccion de descargas",
+                            width=Size.EXTRA_BIG.value,
+                            height=Size.EXTRA_BIG.value,
+                        ),
+                        rx.text(
+                            "0",
+                            font_size=Size.EXTRA_BIG.value,
+                            font_weight="bold",
+                        ),
+                        rx.text(
+                            "Número de descargas mensuales",
+                            font_size=Size.EXTRA_DEFAULT.value,
+                            font_weight="bold",
+                        ),
+                        class_name="flex items-center justify-center w-1/5 h-[350px]",
+                        bg=BackgroundColor.CAJAS.value,
+                        spacing=Size.BIG.value  
+                    ),
+                    rx.vstack(
+                            rx.image(
+                                src="descargas.svg",
+                                alt="Imagen de la seccion de descargas",
+                                width=Size.EXTRA_BIG.value,
+                                height=Size.EXTRA_BIG.value,
+                            ),
+                            rx.text(
+                                "0",
+                                font_size=Size.EXTRA_BIG.value,
+                                font_weight="bold",
+                            ),
+                            rx.text(
+                                "Otro dato que puedan sacar xd",
+                                font_size=Size.EXTRA_DEFAULT.value,
+                                font_weight="bold",
+                            ),
+                            class_name="flex items-center justify-center w-1/5 h-[350px]",
+                            bg=BackgroundColor.CAJAS.value,
+                            spacing=Size.BIG.value  
+                        ),
+                        class_name="justify-center items-center w-full",
+                        margin_top=Size.EXTRA_BIG.value,
+                    ),
+                    padding_y=Size.GIGANTIC.value,
+                    bg=f"{BackgroundColor.PATTERN_URL.value}, {BackgroundColor.GRADIENT.value}"
+                ),
+
+                # Solo falta el footer y el dinamismo ahora lo anado
+
+
+
+            
     )
 
 # se aclara que de momento solo esta el contenido de pc y no de movil, tambien que el dinamismo (movimiento de los patrones, animaciones y otros componentes) no fueron implementados el dia de hoy

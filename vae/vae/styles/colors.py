@@ -5,6 +5,7 @@ class BackgroundColor(Enum):
     AZUL = "#031749"
     GRADIENT = "linear-gradient(to bottom, #96C2EC 0%, #E5F2FC 50%)"
     PATTERN_URL = "url('/pattern.svg')"
+    CAJAS = "#F1F5FF"
 
     
 class TextColor(Enum):
