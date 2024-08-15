@@ -1,5 +1,4 @@
 import reflex as rx
-from .table_render import tabla
 from database.querys import Querys_return
 
 
@@ -8,13 +7,6 @@ def index(on_load=Querys_return.querys()) -> rx.Component: # Funci√≥n para la p√
     # Welcome Page (Index)
     return rx.container(
         rx.color_mode.button(position="top-right"),
-        rx.vstack(
-            tabla(), #*llama a la funcion tabla para renderizar la tabla
-            spacing="5",
-            justify="center",
-            min_height="85vh",
-        ),
-        rx.logo(),
     )
 
 app = rx.App()
