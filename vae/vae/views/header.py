@@ -72,8 +72,8 @@ def header() -> rx.Component:
                             <script>
                                 function startTypingEffect() {{
                                     const sentences = [
-                                        "Más de 40 usuarios diarios confían en nuestra plataforma.",
-                                        "Superamos las 400 descargas de artículos científicos.",
+                                        "Más de 10,000 usuarios registrados confían en nuestra plataforma.",
+                                        "Superamos el millon de descargas en artículos científicos.",
                                         "Apoyando la investigación nacional y extranjera.",
                                         "Facilitando el acceso a datos científicos de calidad.",
                                         "Promoviendo la difusión del conocimiento en Panamá."
