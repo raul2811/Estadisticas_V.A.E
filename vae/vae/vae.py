@@ -1,18 +1,20 @@
 import reflex as rx
-from states.totals import Totals
-
+from states import Context_Downloads, Month_Downloads, Statistics, Submission_Downloads
+import vae.styles.styles as styles
+from vae.views.navbar import navbar
+from vae.views.header import header
 
 def index() -> rx.Component: # Función para la página de inicio
-    return rx.container(
-        rx.text(Totals.journals_total),
-        rx.text(Totals.volumen_total),
-        rx.text(Totals.arti_ess_total),
-        rx.text(Totals.users_total),
-        rx.text(Totals.users_pa_total),
-        rx.text(Totals.users_ext_total),
-        rx.text(Totals.downloads_total),
-        rx.color_mode.button(position="top-right"))
+    return rx.box(
+        navbar(),
+        header(),
+    )
 
 # Se crea una instancia de la clase App y se añade la página index
-app = rx.App()
-app.add_page(index)
+app = rx.App(
+    stylesheets=styles.STYLESHEETS,
+    style=styles.BASE_STYLE
+)
+
+
+
