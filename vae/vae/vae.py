@@ -1,5 +1,4 @@
 import reflex as rx
-from states import Context_Downloads, Month_Downloads, Statistics, Submission_Downloads
 import vae.styles.styles as styles
 from vae.views.navbar import navbar
 from vae.views.header import header
@@ -16,5 +15,6 @@ app = rx.App(
     style=styles.BASE_STYLE
 )
 
+app.add_page(index)
 
 
