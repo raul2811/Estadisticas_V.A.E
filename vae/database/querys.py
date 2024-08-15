@@ -1,4 +1,5 @@
-from database.models import Statistics, Session# Importar las tablas y el Session
+from telnetlib import SE
+from database.models import Statistics, Submission_downloads_top,Session# Importar las tablas y el Session
 from typing import List
 
 
@@ -27,3 +28,15 @@ class Querys_return: # Clase para retornar los querys osea los resultados de cad
                return registro.total
             except Exception as e:
                 print(f"Ocurrió un error inesperado: {e}")
+
+    def mostrar_info3 ():
+        with Session() as session:
+            try:
+                registro = session.query(Submission_downloads_top).all()
+                print("\ntop 4 mas descagados\n")
+                for i in registro:
+                    print(f'{i}\n')
+            except Exception as e:
+                print(f"Ocurrió un error inesperado: {e}")
+
+Querys_return.mostrar_info3() # Mostrar la información de la tabla Submission_donwloads_top
