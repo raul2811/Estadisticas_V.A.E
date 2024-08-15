@@ -1,6 +1,6 @@
 import reflex as rx
 import vae.constants as constants
-
+from states.Statistics import Totals
 from reflex import desktop_only
 from vae.styles.styles import Size, BackgroundColor, TextColor
 from vae.components.link_icon import facultades, universidades, redes
@@ -392,7 +392,7 @@ def header() -> rx.Component:
                             height=Size.EXTRA_BIG.value,
                         ),
                         rx.text(
-                            "0",
+                            Totals.users_pa_total, #usuarios nacionales
                             font_size=Size.EXTRA_BIG.value,
                             font_weight="bold",
                         ),
@@ -413,7 +413,7 @@ def header() -> rx.Component:
                             height=Size.EXTRA_BIG.value,
                         ),
                         rx.text(
-                            "0",
+                            Totals.users_total,#usuarios totales 
                             font_size=Size.EXTRA_BIG.value,
                             font_weight="bold",
                         ),
@@ -434,7 +434,7 @@ def header() -> rx.Component:
                             height=Size.EXTRA_BIG.value,
                         ),
                         rx.text(
-                            "0",
+                            Totals.users_ext_total, # usuarios extranjeros
                             font_size=Size.EXTRA_BIG.value,
                             font_weight="bold",
                         ),
@@ -447,27 +447,6 @@ def header() -> rx.Component:
                         bg=BackgroundColor.CAJAS.value,
                         spacing=Size.BIG.value  
                     ),
-                    rx.vstack(
-                            rx.image(
-                                src="varios.svg",
-                                alt="Imagen de la seccion de usuarios",
-                                width=Size.EXTRA_BIG.value,
-                                height=Size.EXTRA_BIG.value,
-                            ),
-                            rx.text(
-                                "0",
-                                font_size=Size.EXTRA_BIG.value,
-                                font_weight="bold",
-                            ),
-                            rx.text(
-                                "Otro dato que puedan sacar xd",
-                                font_size=Size.EXTRA_DEFAULT.value,
-                                font_weight="bold",
-                            ),
-                            class_name="flex items-center justify-center w-1/5 h-[350px]",
-                            bg=BackgroundColor.CAJAS.value,
-                            spacing=Size.BIG.value  
-                        ),
                         class_name="justify-center items-center w-full",
                         margin_top=Size.EXTRA_BIG.value,
                     ),
@@ -536,7 +515,7 @@ def header() -> rx.Component:
                             height=Size.EXTRA_BIG.value,
                         ),
                         rx.text(
-                            "0",
+                            Totals.journals_total,#revistas activas
                             font_size=Size.EXTRA_BIG.value,
                             font_weight="bold",
                         ),
@@ -557,7 +536,7 @@ def header() -> rx.Component:
                             height=Size.EXTRA_BIG.value,
                         ),
                         rx.text(
-                            "0",
+                            Totals.volumen_total,#num total de volumenes de revistas
                             font_size=Size.EXTRA_BIG.value,
                             font_weight="bold",
                         ),
@@ -578,33 +557,12 @@ def header() -> rx.Component:
                             height=Size.EXTRA_BIG.value,
                         ),
                         rx.text(
-                            "0",
+                            Totals.arti_ess_total,#num total de articulos y ensay
                             font_size=Size.EXTRA_BIG.value,
                             font_weight="bold",
                         ),
                         rx.text(
                             "Número total de artículos y ensayos",
-                            font_size=Size.EXTRA_DEFAULT.value,
-                            font_weight="bold",
-                        ),
-                        class_name="flex items-center justify-center w-1/5 h-[350px]",
-                        bg=BackgroundColor.CAJAS.value,
-                        spacing=Size.BIG.value  
-                    ),
-                rx.vstack(
-                        rx.image(
-                            src="trending.svg",
-                            alt="Imagen de la seccion de revistas",
-                            width=Size.EXTRA_BIG.value,
-                            height=Size.EXTRA_BIG.value,
-                        ),
-                        rx.text(
-                            "0",
-                            font_size=Size.EXTRA_BIG.value,
-                            font_weight="bold",
-                        ),
-                        rx.text(
-                            "Otro dato que puedan sacar xd",
                             font_size=Size.EXTRA_DEFAULT.value,
                             font_weight="bold",
                         ),
@@ -687,7 +645,7 @@ def header() -> rx.Component:
                             height=Size.EXTRA_BIG.value,
                         ),
                         rx.text(
-                            "0",
+                            Totals.downloads_total, #descargas totales
                             font_size=Size.EXTRA_BIG.value,
                             font_weight="bold",
                         ),
@@ -742,27 +700,6 @@ def header() -> rx.Component:
                         bg=BackgroundColor.CAJAS.value,
                         spacing=Size.BIG.value  
                     ),
-                    rx.vstack(
-                            rx.image(
-                                src="descargas.svg",
-                                alt="Imagen de la seccion de descargas",
-                                width=Size.EXTRA_BIG.value,
-                                height=Size.EXTRA_BIG.value,
-                            ),
-                            rx.text(
-                                "0",
-                                font_size=Size.EXTRA_BIG.value,
-                                font_weight="bold",
-                            ),
-                            rx.text(
-                                "Otro dato que puedan sacar xd",
-                                font_size=Size.EXTRA_DEFAULT.value,
-                                font_weight="bold",
-                            ),
-                            class_name="flex items-center justify-center w-1/5 h-[350px]",
-                            bg=BackgroundColor.CAJAS.value,
-                            spacing=Size.BIG.value  
-                        ),
                         class_name="justify-center items-center w-full",
                         margin_top=Size.EXTRA_BIG.value,
                     ),
