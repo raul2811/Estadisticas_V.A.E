@@ -21,6 +21,7 @@ class Size(Enum):
 
 STYLESHEETS = [
     "https://fonts.googleapis.com/css?family=Raleway&display=swap",
+    "css/animaciones.css",
 ]
 
 BASE_STYLE = {

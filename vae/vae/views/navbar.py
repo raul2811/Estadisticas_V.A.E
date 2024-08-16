@@ -3,10 +3,9 @@ import vae.constants as constants
 
 from vae.styles.styles import Size, BackgroundColor, TextColor
 from vae.components.link_icon import link_icon
-from reflex import desktop_only
 
 def navbar() -> rx.Component:
-    return desktop_only(
+    return rx.desktop_only(
         rx.vstack(
             rx.hstack(
                 rx.image(

@@ -17,6 +17,32 @@ data_usuarios = [
     {"name": "Page G", "uv": 3490, "pv": 4300, "amt": 2100},
 ]
 
+rx.html(
+    """
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        function handleScroll() {
+            document.querySelectorAll('.slide-in').forEach(function(element) {
+                const slideInAt = (window.scrollY + window.innerHeight) - element.offsetHeight / 8;
+                const isHalfShown = slideInAt > element.offsetTop;
+                const isNotScrolledPast = window.scrollY < element.offsetTop + element.offsetHeight;
+                if (isHalfShown && isNotScrolledPast) {
+                    element.classList.add('active');
+                } else {
+                    element.classList.remove('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', handleScroll);
+        
+        // Llama a handleScroll inicialmente para manejar elementos que ya están en la vista
+        handleScroll();
+    });
+    </script>
+    """
+)
+
 class TypingState(rx.State):
     def start_typing(self):
         return rx.call_script("startTypingEffect()")
@@ -34,109 +60,110 @@ def line_simple_usuarios():
         height=300,
     )
 
-def header() -> rx.Component:
+def body() -> rx.Component:
     return desktop_only(
 
         # Parte inicial donde se ve el inicio contiene el buscador y la bienvenida
         rx.vstack(
-            rx.hstack(
-                rx.box(
-                    rx.vstack(
-                        rx.text(
-                            "Universidad de Panamá",
-                            font_size=Size.EXTRA_DEFAULT.value,
-                            font_weight="bold"
-                        ),
-                        rx.text(
-                            "Estadística de Revistas y Artículos Científicos",
-                            font_size=Size.HUGE.value,
-                            font_weight="bold"
-                        ),
-                        justify="center"
-                    ),
-                    class_name="flex-1 mr-[1vw]"
+    rx.hstack(
+        rx.box(
+            rx.vstack(
+                rx.text(
+                    "Universidad de Panamá",
+                    font_size=Size.EXTRA_DEFAULT.value,
+                    font_weight="bold"
                 ),
-                rx.box(
-                    rx.vstack(
-                        rx.text(
-                            "Bienvenidos a la página de estadísticas de revistas y artículos científicos. Este portal te ofrece una visión completa del impacto de nuestras publicaciones, incluyendo información sobre el número de usuarios registrados, la cantidad de artículos disponibles, y estadísticas detalladas de descargas.",
-                            font_size=Size.EXTRA_DEFAULT.value,
-                        ),
-                        # Esta parte proximamente sera eliminada y se cambiara por un componente react (Es que ya se veia muy simple y me estaba dando una embolia visual)
-                        rx.html(
-                            """
-                            <div id="typing-container" style="font-size: {}; font-weight: bold; margin-top: {}; color: {}; white-space: nowrap;">
-                                <span id="typing-text"></span><span id="cursor" style="visibility: visible;">|</span>
-                            </div>
-                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                            <script>
-                                function startTypingEffect() {{
-                                    const sentences = [
-                                        "Más de 10,000 usuarios registrados confían en nuestra plataforma.",
-                                        "Superamos el millon de descargas en artículos científicos.",
-                                        "Apoyando la investigación nacional y extranjera.",
-                                        "Facilitando el acceso a datos científicos de calidad.",
-                                        "Promoviendo la difusión del conocimiento en Panamá."
-                                    ];
-                                    let currentSentence = 0;
-                                    let currentChar = 0;
-                                    let isTyping = true;
+                rx.text(
+                    "Estadística de Revistas y Artículos Científicos",
+                    font_size=Size.HUGE.value,
+                    font_weight="bold"
+                ),
+                justify="center"
+            ),
+            class_name="flex-1 mr-[1vw] animate-slide-in-left",  
+            id="left-content"
+        ),
+        rx.box(
+            rx.vstack(
+                rx.text(
+                    "Bienvenidos a la página de estadísticas de revistas y artículos científicos. Este portal te ofrece una visión completa del impacto de nuestras publicaciones, incluyendo información sobre el número de usuarios registrados, la cantidad de artículos disponibles, y estadísticas detalladas de descargas.",
+                    font_size=Size.EXTRA_DEFAULT.value,
+                ),
+                rx.html(
+                    """
+                    <div id="typing-container" style="font-size: {}; font-weight: bold; margin-top: {}; color: {}; white-space: nowrap;">
+                        <span id="typing-text"></span><span id="cursor" style="visibility: visible;">|</span>
+                    </div>
+                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                    <script>
+                        function startTypingEffect() {{
+                            const sentences = [
+                                "Más de 10,000 usuarios registrados confían en nuestra plataforma.",
+                                "Superamos el millon de descargas en artículos científicos.",
+                                "Apoyando la investigación nacional y extranjera.",
+                                "Facilitando el acceso a datos científicos de calidad.",
+                                "Promoviendo la difusión del conocimiento en Panamá."
+                            ];
+                            let currentSentence = 0;
+                            let currentChar = 0;
+                            let isTyping = true;
 
-                                    function typeChar() {{
-                                        if (currentChar < sentences[currentSentence].length) {{
-                                            $("#typing-text").text(function(_, text) {{
-                                                return text + sentences[currentSentence][currentChar];
-                                            }});
-                                            currentChar++;
-                                            setTimeout(typeChar, 50);
-                                        }} else if (isTyping) {{
-                                            isTyping = false;
-                                            setTimeout(eraseChar, 2000);
-                                        }}
-                                    }}
-
-                                    function eraseChar() {{
-                                        if (currentChar > 0) {{
-                                            $("#typing-text").text(function(_, text) {{
-                                                return text.slice(0, -1);
-                                            }});
-                                            currentChar--;
-                                            setTimeout(eraseChar, 20);
-                                        }} else {{
-                                            isTyping = true;
-                                            currentSentence = (currentSentence + 1) % sentences.length;
-                                            setTimeout(typeChar, 500);
-                                        }}
-                                    }}
-
-                                    function toggleCursor() {{
-                                        $("#cursor").css("visibility", function(_, visibility) {{
-                                            return visibility === 'visible' ? 'hidden' : 'visible';
-                                        }});
-                                    }}
-
-                                    setInterval(toggleCursor, 500);
-                                    typeChar();
+                            function typeChar() {{
+                                if (currentChar < sentences[currentSentence].length) {{
+                                    $("#typing-text").text(function(_, text) {{
+                                        return text + sentences[currentSentence][currentChar];
+                                    }});
+                                    currentChar++;
+                                    setTimeout(typeChar, 50);
+                                }} else if (isTyping) {{
+                                    isTyping = false;
+                                    setTimeout(eraseChar, 2000);
                                 }}
-                                $(document).ready(function() {{
-                                    startTypingEffect();
+                            }}
+
+                            function eraseChar() {{
+                                if (currentChar > 0) {{
+                                    $("#typing-text").text(function(_, text) {{
+                                        return text.slice(0, -1);
+                                    }});
+                                    currentChar--;
+                                    setTimeout(eraseChar, 20);
+                                }} else {{
+                                    isTyping = true;
+                                    currentSentence = (currentSentence + 1) % sentences.length;
+                                    setTimeout(typeChar, 500);
+                                }}
+                            }}
+
+                            function toggleCursor() {{
+                                $("#cursor").css("visibility", function(_, visibility) {{
+                                    return visibility === 'visible' ? 'hidden' : 'visible';
                                 }});
-                            </script>
-                            """,
-                            margin_top=Size.BIG.value,
-                        ),
-                        rx.text(
-                            "Descubre los últimos avances científicos y cómo impactan en nuestra comunidad.",
-                            margin_top=Size.SMALL.value,
-                        ),
-                    ),
-                    class_name="flex-1 mr-[1vw]"
+                            }}
+
+                            setInterval(toggleCursor, 500);
+                            typeChar();
+                        }}
+                        $(document).ready(function() {{
+                            startTypingEffect();
+                        }});
+                    </script>
+                    """,
+                    margin_top=Size.BIG.value,
+                ),
+                rx.text(
+                    "Descubre los últimos avances científicos y cómo impactan en nuestra comunidad.",
+                    margin_top=Size.SMALL.value,
                 ),
             ),
-            bg=BackgroundColor.DEFAULT.value,
-            padding_x=Size.EXTRA_BIG.value,
-            padding_y=Size.GIGANTIC.value,
+            class_name="flex-1 mr-[1vw] animate-slide-in-right",  
+            id="right-content"
         ),
+    ),
+    bg=BackgroundColor.DEFAULT.value,
+    padding_x=Size.EXTRA_BIG.value,
+    padding_y=Size.GIGANTIC.value,
+),
 
         # En esta parte se espera que coloquen la imagen de las 4 revistas (o articulos) mas descargadas o algo simiar al tema 
         rx.vstack(
