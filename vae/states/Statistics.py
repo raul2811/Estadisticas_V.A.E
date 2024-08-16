@@ -5,7 +5,7 @@ class Totals(rx.State):
     @rx.var
     def journals_total(self) -> str:
         total=Querys_return.mostrar_colum_total('journals')
-        return f"{total:,.2f}".replace(",", ".")
+        return total
         #retorna el total de revistas.
     @rx.var
     def volumen_total(self) -> str:
