@@ -99,7 +99,7 @@ def body() -> rx.Component:
                         function startTypingEffect() {{
                             const sentences = [
                                 "Más de 10,000 usuarios registrados confían en nuestra plataforma.",
-                                "Superamos el millon de descargas en artículos científicos.",
+                                "Superamos el millón de descargas en artículos científicos.",
                                 "Apoyando la investigación nacional y extranjera.",
                                 "Facilitando el acceso a datos científicos de calidad.",
                                 "Promoviendo la difusión del conocimiento en Panamá."
