@@ -1,4 +1,3 @@
-from telnetlib import SE
 from database.models import Statistics, Submission_downloads_top,Session# Importar las tablas y el Session
 from typing import List
 
@@ -21,7 +20,7 @@ class Querys_return: # Clase para retornar los querys osea los resultados de cad
             except Exception as e:
                 print(f"Ocurrió un error inesperado: {e}")
     '''
-    def mostrar_colum_total (name):# Mostrar el total de la estadistica ingresando una variable name para retornar el valor de la columna total.
+    def mostrar_statistics (name):# Mostrar el total de la estadistica ingresando una variable name para retornar el valor de la columna total.
         with Session() as session:
             try:
                registro= session.query(Statistics).filter(Statistics.name == name).first()
@@ -29,14 +28,43 @@ class Querys_return: # Clase para retornar los querys osea los resultados de cad
             except Exception as e:
                 print(f"Ocurrió un error inesperado: {e}")
 
-    def mostrar_info3 ():
+    def mostrar_submission_download_top(num, name):
         with Session() as session:
             try:
+                # Consultar todos los registros
                 registro = session.query(Submission_downloads_top).all()
-                print("\ntop 4 mas descagados\n")
+                
+                # Convertir registros en una lista de diccionarios
+                data = []
                 for i in registro:
-                    print(f'{i}\n')
-            except Exception as e:
-                print(f"Ocurrió un error inesperado: {e}")
+                    data.append({
+                        "context_id": i.context_id,
+                        "submission_id": i.submission_id,
+                        "path": i.path,
+                        "publication_id": i.publication_id,
+                        "clean_title": i.cleantitle,  # Asegúrate de que 'clean_title' sea el nombre correcto
+                        "issue_id": i.issueid,  # Asegúrate de que 'issue_id' sea el nombre correcto
+                        "total_metric": i.total_metric
+                    })
 
-Querys_return.mostrar_info3() # Mostrar la información de la tabla Submission_donwloads_top
+                # Verificar si el índice 'num' está dentro de los límites
+                if num >= len(data) or num < 0:
+                    raise IndexError("El índice 'num' está fuera del rango de los datos disponibles.")
+                
+                # Verificar si 'name' es una clave válida en el diccionario
+                if name not in data[num]:
+                    raise KeyError(f"La clave '{name}' no existe en los datos.")
+
+                return data[num][name]
+            
+            except (IndexError, KeyError) as e:
+                # Captura errores específicos para índices fuera de rango y claves inválidas
+                print(f"Error de acceso a datos: {e}")
+                return None
+            except Exception as e:
+                # Captura cualquier otro tipo de error
+                print(f"Ocurrió un error inesperado: {e}")
+                return None
+
+    # Prueba de la función
+    print(mostrar_submission_download_top(0, "context_id"))  # Asegúrate de que 'context_id' es una clave válida
