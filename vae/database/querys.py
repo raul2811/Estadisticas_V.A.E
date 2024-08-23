@@ -1,4 +1,4 @@
-from database.models import Statistics, Submission_downloads_top,Session# Importar las tablas y el Session
+from database.models import Statistics, Submission_downloads_top,Submissions_recents, Session# Importar las tablas y el Session
 from typing import List
 
 
@@ -57,6 +57,38 @@ class Querys_return: # Clase para retornar los querys osea los resultados de cad
 
                 return data[num][name]
             
+            except (IndexError, KeyError) as e:
+                # Captura errores específicos para índices fuera de rango y claves inválidas
+                print(f"Error de acceso a datos: {e}")
+                return None
+            except Exception as e:
+                # Captura cualquier otro tipo de error
+                print(f"Ocurrió un error inesperado: {e}")
+                return None
+
+    def mostrar_submission_recents (num, name):
+        with Session() as session:
+            try:
+                registro = session.query(Submissions_recents).all()
+                data = []
+                for i in registro:
+                    data.append({
+                        "publication_id": i.publication_id,
+                        "date_published": i.date_published,
+                        "title": i.title,
+                        "issue_id": i.issue_id,
+                        "journal_id": i.journal_id
+                    })
+                # Verificar si el índice 'num' está dentro de los límites
+                if num >= len(data) or num < 0:
+                    raise IndexError("El índice 'num' está fuera del rango de los datos disponibles.")
+                
+                # Verificar si 'name' es una clave válida en el diccionario
+                if name not in data[num]:
+                    raise KeyError(f"La clave '{name}' no existe en los datos.")
+                
+                return data [num][name] # Retorna la lista de diccionarios
+                
             except (IndexError, KeyError) as e:
                 # Captura errores específicos para índices fuera de rango y claves inválidas
                 print(f"Error de acceso a datos: {e}")
