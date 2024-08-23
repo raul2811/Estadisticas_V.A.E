@@ -187,23 +187,23 @@ def body() -> rx.Component:
 
             #Aqui estan los espacios 
             rx.hstack(
+                rx.image(
+                    src="ejemplo.jpg",
+                    class_name="w-[20%] h-[400px]",
+                    margin_x=Size.SMALL.value
+                ),
                 rx.box(
-                    class_name="w-[20%] h-[350px]",
+                    class_name="w-[20%] h-[400px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
                 rx.box(
-                    class_name="w-[20%] h-[350px]",
+                    class_name="w-[20%] h-[400px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
                 rx.box(
-                    class_name="w-[20%] h-[350px]",
-                    bg=BackgroundColor.DEFAULT.value,
-                    margin_x=Size.SMALL.value
-                ),
-                rx.box(
-                    class_name="w-[20%] h-[350px]",
+                    class_name="w-[20%] h-[400px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
@@ -318,22 +318,22 @@ def body() -> rx.Component:
             ),
             rx.hstack(
                 rx.box(
-                    class_name="w-[20%] h-[350px]",
+                    class_name="w-[20%] h-[400px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
                 rx.box(
-                    class_name="w-[20%] h-[350px]",
+                    class_name="w-[20%] h-[400px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
                 rx.box(
-                    class_name="w-[20%] h-[350px]",
+                    class_name="w-[20%] h-[400px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
                 rx.box(
-                    class_name="w-[20%] h-[350px]",
+                    class_name="w-[20%] h-[400px]",
                     bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
