@@ -1,4 +1,5 @@
 from multiprocessing import context
+import re
 from sqlalchemy import Column, String, Float, BigInteger, Integer, ForeignKey
 from sqlalchemy.orm import sessionmaker ,declarative_base,relationship
 from database.engine import engine
@@ -55,3 +56,14 @@ class Submission_downloads_top (Base):
 
     def __repr__(self):
         return f"<submission_id=(submission_id={self.submission_id}, context_id='{self.context_id}', path='{self.path}', publication_id='{self.publication_id}', cleantitle='{self.cleantitle}', issueid='{self.issueid}', total_metric='{self.total_metric}'))>" # Representación de la tabla
+
+class Submissions_recents (Base):
+    __tablename__ = 'submissions_recents'
+    publication_id = Column (BigInteger, primary_key=True, nullable=False)
+    date_published = Column (BigInteger, nullable=False)
+    title = Column(String, nullable=False)
+    issue_id = Column(BigInteger, nullable=False)
+    journal_id = Column(BigInteger, nullable=False)
+
+    def __repr__(self):
+            return f"<publication_id=(publication_id={self.publication_id}, date_published='{self.date_published}', title='{self.title}', issue_id='{self.issue_id}', journal_id='{self.journal_id}'))>" # Representación de la tabla
