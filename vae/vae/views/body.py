@@ -1,7 +1,7 @@
 import reflex as rx
 import vae.constants as constants
 from states.Statistics import Totals
-#from states.Submission_Downloads_top import Submission_Downloads_top
+from states.Submission_Downloads_top import Submission_Downloads_top
 from reflex import desktop_only
 from vae.styles.styles import Size, BackgroundColor, TextColor
 from vae.components.link_icon import facultades, universidades, redes
@@ -188,23 +188,23 @@ def body() -> rx.Component:
             #Aqui estan los espacios 
             rx.hstack(
                 rx.image(
-                    src="ejemplo.jpg",
+                    src=(f"http://10.0.1.235/ojs/public/journals/{Submission_Downloads_top.context_id_0}/cover_issue_{Submission_Downloads_top.issue_id_0}_es_ES.jpg"),
                     class_name="w-[20%] h-[400px]",
                     margin_x=Size.SMALL.value
                 ),
-                rx.box(
+                rx.image(
+                    src=(f"http://10.0.1.235/ojs/public/journals/{Submission_Downloads_top.context_id_1}/cover_issue_{Submission_Downloads_top.issue_id_1}_es_ES.jpg"),
                     class_name="w-[20%] h-[400px]",
-                    bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
-                rx.box(
+                rx.image(
+                    src=(f"http://10.0.1.235/ojs/public/journals/{Submission_Downloads_top.context_id_2}/cover_issue_{Submission_Downloads_top.issue_id_2}_es_ES.jpg"),
                     class_name="w-[20%] h-[400px]",
-                    bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
-                rx.box(
+                rx.image(
+                    src=(f"http://10.0.1.235/ojs/public/journals/{Submission_Downloads_top.context_id_3}/cover_issue_{Submission_Downloads_top.issue_id_3}_es_ES.jpg"),
                     class_name="w-[20%] h-[400px]",
-                    bg=BackgroundColor.DEFAULT.value,
                     margin_x=Size.SMALL.value
                 ),
                 class_name="justify-center items-center w-full",
