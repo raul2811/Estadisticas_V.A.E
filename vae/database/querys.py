@@ -65,6 +65,3 @@ class Querys_return: # Clase para retornar los querys osea los resultados de cad
                 # Captura cualquier otro tipo de error
                 print(f"Ocurrió un error inesperado: {e}")
                 return None
-
-    # Prueba de la función
-    print(mostrar_submission_download_top(0, "context_id"))  # Asegúrate de que 'context_id' es una clave válida
