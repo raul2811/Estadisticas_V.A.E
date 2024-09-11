@@ -120,7 +120,7 @@ def footer() -> rx.Component:
                     ),
                     rx.link(
                         rx.text(
-                            "AmeliCA Centroamérica Colección Digital de Revistas Académicas Centroamérica",
+                            "Amelica Centroamérica Colección Digital de Revistas Académicas Centroamérica",
                             cursor="pointer",
                             padding_x=Size.HUGE.value,
                             margin_top=Size.DEFAULT.value,

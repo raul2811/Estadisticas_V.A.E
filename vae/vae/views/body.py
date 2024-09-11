@@ -19,32 +19,6 @@ data_usuarios = [
     {"name": "Page G", "uv": 3490, "pv": 4300, "amt": 2100},
 ]
 
-rx.html(
-    """
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        function handleScroll() {
-            document.querySelectorAll('.slide-in').forEach(function(element) {
-                const slideInAt = (window.scrollY + window.innerHeight) - element.offsetHeight / 8;
-                const isHalfShown = slideInAt > element.offsetTop;
-                const isNotScrolledPast = window.scrollY < element.offsetTop + element.offsetHeight;
-                if (isHalfShown && isNotScrolledPast) {
-                    element.classList.add('active');
-                } else {
-                    element.classList.remove('active');
-                }
-            });
-        }
-
-        window.addEventListener('scroll', handleScroll);
-        
-        // Llama a handleScroll inicialmente para manejar elementos que ya están en la vista
-        handleScroll();
-    });
-    </script>
-    """
-)
-
 class TypingState(rx.State):
     def start_typing(self):
         return rx.call_script("startTypingEffect()")
@@ -67,105 +41,131 @@ def body() -> rx.Component:
 
         # Parte inicial donde se ve el inicio contiene el buscador y la bienvenida
         rx.vstack(
-    rx.hstack(
-        rx.box(
-            rx.vstack(
-                rx.text(
-                    "Universidad de Panamá",
-                    font_size=Size.EXTRA_DEFAULT.value,
-                    font_weight="bold"
+            rx.hstack(
+                rx.box(
+                    rx.vstack(
+                        rx.text(
+                            "Universidad de Panamá",
+                            font_size=Size.EXTRA_DEFAULT.value,
+                            font_weight="bold"
+                        ),
+                        rx.text(
+                            "Estadística de Revistas y Artículos Científicos",
+                            font_size=Size.HUGE.value,
+                            font_weight="bold"
+                        ),
+                        justify="center"
+                    ),
+                    class_name="flex-1 mr-[1vw] animate-slide-in-left",  
+                    id="left-content"
                 ),
-                rx.text(
-                    "Estadística de Revistas y Artículos Científicos",
-                    font_size=Size.HUGE.value,
-                    font_weight="bold"
-                ),
-                justify="center"
-            ),
-            class_name="flex-1 mr-[1vw] animate-slide-in-left",  
-            id="left-content"
-        ),
-        rx.box(
-            rx.vstack(
-                rx.text(
-                    "Bienvenidos a la página de estadísticas de revistas y artículos científicos. Este portal te ofrece una visión completa del impacto de nuestras publicaciones, incluyendo información sobre el número de usuarios registrados, la cantidad de artículos disponibles, y estadísticas detalladas de descargas.",
-                    font_size=Size.EXTRA_DEFAULT.value,
-                ),
-                rx.html(
-                    """
-                    <div id="typing-container" style="font-size: {}; font-weight: bold; margin-top: {}; color: {}; white-space: nowrap;">
-                        <span id="typing-text"></span><span id="cursor" style="visibility: visible;">|</span>
-                    </div>
-                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-                    <script>
-                        function startTypingEffect() {{
-                            const sentences = [
-                                "Más de 10,000 usuarios registrados confían en nuestra plataforma.",
-                                "Superamos el millón de descargas en artículos científicos.",
-                                "Apoyando la investigación nacional y extranjera.",
-                                "Facilitando el acceso a datos científicos de calidad.",
-                                "Promoviendo la difusión del conocimiento en Panamá."
-                            ];
-                            let currentSentence = 0;
-                            let currentChar = 0;
-                            let isTyping = true;
+                rx.box(
+                    rx.vstack(
+                        rx.text(
+                            "Bienvenidos a la página de estadísticas de revistas y artículos científicos. Este portal te ofrece una visión completa del impacto de nuestras publicaciones, incluyendo información sobre el número de usuarios registrados, la cantidad de artículos disponibles, y estadísticas detalladas de descargas.",
+                            font_size=Size.EXTRA_DEFAULT.value,
+                        ),
+                        rx.html(
+                            """
+                            <div id="typing-container" style="font-size: {}; font-weight: bold; margin-top: {}; color: {}; white-space: nowrap;">
+                                <span id="typing-text"></span><span id="cursor" style="visibility: visible;">|</span>
+                            </div>
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            <script>
+                                function startTypingEffect() {{
+                                    const sentences = [
+                                        "Más de 10,000 usuarios registrados confían en nuestra plataforma.",
+                                        "Superamos el millón de descargas en artículos científicos.",
+                                        "Apoyando la investigación nacional y extranjera.",
+                                        "Facilitando el acceso a datos científicos de calidad.",
+                                        "Promoviendo la difusión del conocimiento en Panamá."
+                                    ];
+                                    let currentSentence = 0;
+                                    let currentChar = 0;
+                                    let isTyping = true;
 
-                            function typeChar() {{
-                                if (currentChar < sentences[currentSentence].length) {{
-                                    $("#typing-text").text(function(_, text) {{
-                                        return text + sentences[currentSentence][currentChar];
-                                    }});
-                                    currentChar++;
-                                    setTimeout(typeChar, 50);
-                                }} else if (isTyping) {{
-                                    isTyping = false;
-                                    setTimeout(eraseChar, 2000);
+                                    function typeChar() {{
+                                        if (currentChar < sentences[currentSentence].length) {{
+                                            $("#typing-text").text(function(_, text) {{
+                                                return text + sentences[currentSentence][currentChar];
+                                            }});
+                                            currentChar++;
+                                            setTimeout(typeChar, 50);
+                                        }} else if (isTyping) {{
+                                            isTyping = false;
+                                            setTimeout(eraseChar, 2000);
+                                        }}
+                                    }}
+
+                                    function eraseChar() {{
+                                        if (currentChar > 0) {{
+                                            $("#typing-text").text(function(_, text) {{
+                                                return text.slice(0, -1);
+                                            }});
+                                            currentChar--;
+                                            setTimeout(eraseChar, 20);
+                                        }} else {{
+                                            isTyping = true;
+                                            currentSentence = (currentSentence + 1) % sentences.length;
+                                            setTimeout(typeChar, 500);
+                                        }}
+                                    }}
+
+                                    function toggleCursor() {{
+                                        $("#cursor").css("visibility", function(_, visibility) {{
+                                            return visibility === 'visible' ? 'hidden' : 'visible';
+                                        }});
+                                    }}
+
+                                    setInterval(toggleCursor, 500);
+                                    typeChar();
                                 }}
-                            }}
-
-                            function eraseChar() {{
-                                if (currentChar > 0) {{
-                                    $("#typing-text").text(function(_, text) {{
-                                        return text.slice(0, -1);
-                                    }});
-                                    currentChar--;
-                                    setTimeout(eraseChar, 20);
-                                }} else {{
-                                    isTyping = true;
-                                    currentSentence = (currentSentence + 1) % sentences.length;
-                                    setTimeout(typeChar, 500);
-                                }}
-                            }}
-
-                            function toggleCursor() {{
-                                $("#cursor").css("visibility", function(_, visibility) {{
-                                    return visibility === 'visible' ? 'hidden' : 'visible';
+                                $(document).ready(function() {{
+                                    startTypingEffect();
                                 }});
-                            }}
+                            </script>
+                            <script>
+                                document.addEventListener('DOMContentLoaded', function() {
+                                let lastScrollTop = 0;
 
-                            setInterval(toggleCursor, 500);
-                            typeChar();
-                        }}
-                        $(document).ready(function() {{
-                            startTypingEffect();
-                        }});
-                    </script>
-                    """,
-                    margin_top=Size.BIG.value,
-                ),
-                rx.text(
-                    "Descubre los últimos avances científicos y cómo impactan en nuestra comunidad.",
-                    margin_top=Size.SMALL.value,
+                                window.addEventListener('scroll', function() {
+                                    let st = window.pageYOffset || document.documentElement.scrollTop;
+                                    let leftContent = document.getElementById('left-content');
+                                    let rightContent = document.getElementById('right-content');
+
+                                    if (st > lastScrollTop) {
+                                        // Scroll down
+                                        leftContent.classList.remove('animate-slide-in-left');
+                                        leftContent.classList.add('animate-slide-out-left');
+                                        rightContent.classList.remove('animate-slide-in-right');
+                                        rightContent.classList.add('animate-slide-out-right');
+                                    } else {
+                                        // Scroll up
+                                        leftContent.classList.remove('animate-slide-out-left');
+                                        leftContent.classList.add('animate-slide-in-left');
+                                        rightContent.classList.remove('animate-slide-out-right');
+                                        rightContent.classList.add('animate-slide-in-right');
+                                    }
+                                    lastScrollTop = st <= 0 ? 0 : st; // For Mobile or negative scrolling
+                                }, false);
+                            });
+                            </script>
+                            """,
+                            margin_top=Size.BIG.value,
+                        ),
+                        rx.text(
+                            "Descubre los últimos avances científicos y cómo impactan en nuestra comunidad.",
+                            margin_top=Size.SMALL.value,
+                        ),
+                    ),
+                    class_name="flex-1 mr-[1vw] animate-slide-in-right",  
+                    id="right-content"
                 ),
             ),
-            class_name="flex-1 mr-[1vw] animate-slide-in-right",  
-            id="right-content"
+            bg=BackgroundColor.DEFAULT.value,
+            padding_x=Size.EXTRA_BIG.value,
+            padding_y=Size.MASSIVE.value,
         ),
-    ),
-    bg=BackgroundColor.DEFAULT.value,
-    padding_x=Size.EXTRA_BIG.value,
-    padding_y=Size.GIGANTIC.value,
-),
 
         # En esta parte se espera que coloquen la imagen de las 4 revistas (o articulos) mas descargadas o algo simiar al tema 
         rx.vstack(
@@ -184,28 +184,160 @@ def body() -> rx.Component:
                     class_name="items-center w-full"
                 ),
                 class_name="flex w-full"
-            ),
+            ), 
 
             #Aqui estan los espacios 
-            rx.hstack(
-                rx.image(
-                    src=(f"http://10.0.1.235/ojs/public/journals/{Submission_Downloads_top.context_id_0}/cover_issue_{Submission_Downloads_top.issue_id_0}_es_ES.jpg"),
-                    class_name="w-[20%] h-[400px]",
+           rx.hstack(
+                rx.box(
+                    rx.vstack(
+                        rx.box(
+                            rx.image(
+                                src=(f"http://10.0.1.235/ojs/public/journals/{Submission_Downloads_top.context_id_0}/cover_issue_{Submission_Downloads_top.issue_id_0}_es_ES.jpg"),
+                                class_name="w-full h-full"
+                            ),
+                            class_name="front"
+                        ),
+                        rx.box(
+                            rx.vstack(
+                                rx.image(
+                                    src="varios.svg",
+                                    alt="Imagen de la seccion de usuarios",
+                                    width=Size.EXTRA_BIG.value,
+                                    height=Size.EXTRA_BIG.value,
+                                ),
+                                rx.text(
+                                    "1", 
+                                    font_size=Size.EXTRA_BIG.value,
+                                    font_weight="bold",
+                                ),
+                                rx.text(
+                                    "Revista Tecnociencia",
+                                    font_size=Size.EXTRA_DEFAULT.value,
+                                    font_weight="bold",
+                                ),
+                                class_name="flex items-center justify-center w-full h-full",
+                                bg=BackgroundColor.CAJAS.value,
+                                spacing=Size.BIG.value  
+                            ),
+                            class_name="back"
+                        ),
+                        class_name="flipper"
+                    ),
+                    class_name="flip-container",
                     margin_x=Size.SMALL.value
                 ),
-                rx.image(
-                    src=(f"http://10.0.1.235/ojs/public/journals/{Submission_Downloads_top.context_id_1}/cover_issue_{Submission_Downloads_top.issue_id_1}_es_ES.jpg"),
-                    class_name="w-[20%] h-[400px]",
+                rx.box(
+                    rx.vstack(
+                        rx.box(
+                            rx.image(
+                                src=(f"http://10.0.1.235/ojs/public/journals/{Submission_Downloads_top.context_id_1}/cover_issue_{Submission_Downloads_top.issue_id_1}_es_ES.jpg"),
+                                class_name="w-full h-full"
+                            ),
+                            class_name="front"
+                        ),
+                        rx.box(
+                            rx.vstack(
+                                rx.image(
+                                    src="varios.svg",
+                                    alt="Imagen de la seccion de usuarios",
+                                    width=Size.EXTRA_BIG.value,
+                                    height=Size.EXTRA_BIG.value,
+                                ),
+                                rx.text(
+                                    "2", 
+                                    font_size=Size.EXTRA_BIG.value,
+                                    font_weight="bold",
+                                ),
+                                rx.text(
+                                    "Revista Faeco Sapiens",
+                                    font_size=Size.EXTRA_DEFAULT.value,
+                                    font_weight="bold",
+                                ),
+                                class_name="flex items-center justify-center w-full h-full",
+                                bg=BackgroundColor.CAJAS.value,
+                                spacing=Size.BIG.value  
+                            ),
+                            class_name="back"
+                        ),
+                        class_name="flipper"
+                    ),
+                    class_name="flip-container",
                     margin_x=Size.SMALL.value
                 ),
-                rx.image(
-                    src=(f"http://10.0.1.235/ojs/public/journals/{Submission_Downloads_top.context_id_2}/cover_issue_{Submission_Downloads_top.issue_id_2}_es_ES.jpg"),
-                    class_name="w-[20%] h-[400px]",
+                rx.box(
+                    rx.vstack(
+                        rx.box(
+                            rx.image(
+                                src=(f"http://10.0.1.235/ojs/public/journals/{Submission_Downloads_top.context_id_2}/cover_issue_{Submission_Downloads_top.issue_id_2}_es_ES.jpg"),
+                                class_name="w-full h-full"
+                            ),
+                            class_name="front"
+                        ),
+                        rx.box(
+                            rx.vstack(
+                                rx.image(
+                                    src="varios.svg",
+                                    alt="Imagen de la seccion de usuarios",
+                                    width=Size.EXTRA_BIG.value,
+                                    height=Size.EXTRA_BIG.value,
+                                ),
+                                rx.text(
+                                "3",
+                                    font_size=Size.EXTRA_BIG.value,
+                                    font_weight="bold",
+                                ),
+                                rx.text(
+                                    "Revista Contacto",
+                                    font_size=Size.EXTRA_DEFAULT.value,
+                                    font_weight="bold",
+                                ),
+                                class_name="flex items-center justify-center w-full h-full",
+                                bg=BackgroundColor.CAJAS.value,
+                                spacing=Size.BIG.value  
+                            ),
+                            class_name="back"
+                        ),
+                        class_name="flipper"
+                    ),
+                    class_name="flip-container",
                     margin_x=Size.SMALL.value
                 ),
-                rx.image(
-                    src=(f"http://10.0.1.235/ojs/public/journals/{Submission_Downloads_top.context_id_3}/cover_issue_{Submission_Downloads_top.issue_id_3}_es_ES.jpg"),
-                    class_name="w-[20%] h-[400px]",
+                rx.box(
+                    rx.vstack(
+                        rx.box(
+                            rx.image(
+                                src=(f"http://10.0.1.235/ojs/public/journals/{Submission_Downloads_top.context_id_3}/cover_issue_{Submission_Downloads_top.issue_id_3}_es_ES.jpg"),
+                                class_name="w-full h-full"
+                            ),
+                            class_name="front"
+                        ),
+                        rx.box(
+                            rx.vstack(
+                                rx.image(
+                                    src="varios.svg",
+                                    alt="Imagen de la seccion de usuarios",
+                                    width=Size.EXTRA_BIG.value,
+                                    height=Size.EXTRA_BIG.value,
+                                ),
+                                rx.text(
+                                    "4",
+                                    font_size=Size.EXTRA_BIG.value,
+                                    font_weight="bold",
+                                ),
+                                rx.text(
+                                    "Anuario de derecho 2020",
+                                    font_size=Size.EXTRA_DEFAULT.value,
+                                    font_weight="bold",
+                                ),
+                                class_name="flex items-center justify-center w-full h-full",
+                                bg=BackgroundColor.CAJAS.value,
+                                spacing=Size.BIG.value  
+                            ),
+                            class_name="back"
+                        ),
+                        class_name="flipper"
+                    ),
+                    class_name="flip-container",
                     margin_x=Size.SMALL.value
                 ),
                 class_name="justify-center items-center w-full",
@@ -213,7 +345,7 @@ def body() -> rx.Component:
             ),
             padding_y=Size.GIGANTIC.value,
             bg=f"{BackgroundColor.PATTERN_URL.value}, {BackgroundColor.GRADIENT.value}"
-        ),
+            ),
 
         # En esta parte se aya la primera grafica referente al los usuarios cuantas personas activas hay en la plataforma
         rx.hstack(
@@ -318,26 +450,158 @@ def body() -> rx.Component:
                 class_name="flex w-full"
             ),
             rx.hstack(
-                rx.image(
-                    src=(f"http://10.0.1.235/ojs/public/journals/{Submission_recents.journal_id_0}/cover_issue_{Submission_recents.issue_id_0}_es_ES.jpg"),
-                    class_name="w-[20%] h-[400px]",
+                rx.box(
+                    rx.vstack(
+                        rx.box(
+                            rx.image(
+                                src=(f"http://10.0.1.235/ojs/public/journals/{Submission_recents.journal_id_0}/cover_issue_{Submission_recents.issue_id_0}_es_ES.jpg"),
+                                class_name="w-full h-full"
+                            ),
+                            class_name="front"
+                        ),
+                        rx.box(
+                            rx.vstack(
+                                rx.image(
+                                    src="varios.svg",
+                                    alt="Imagen de la seccion de usuarios",
+                                    width=Size.EXTRA_BIG.value,
+                                    height=Size.EXTRA_BIG.value,
+                                ),
+                                rx.text(
+                                    "4",
+                                    font_size=Size.EXTRA_BIG.value,
+                                    font_weight="bold",
+                                ),
+                                rx.text(
+                                    "Anuario de derecho 2020",
+                                    font_size=Size.EXTRA_DEFAULT.value,
+                                    font_weight="bold",
+                                ),
+                                class_name="flex items-center justify-center w-full h-full",
+                                bg=BackgroundColor.CAJAS.value,
+                                spacing=Size.BIG.value  
+                            ),
+                            class_name="back"
+                        ),
+                        class_name="flipper"
+                    ),
+                    class_name="flip-container",
                     margin_x=Size.SMALL.value
-                ),#? faltaria agregar Submission_recents.date_0 o .title_0 para mostrar la fecha o el titulo
-                rx.image(
-                    src=(f"http://10.0.1.235/ojs/public/journals/{Submission_recents.journal_id_1}/cover_issue_{Submission_recents.issue_id_1}_es_ES.jpg"),
-                    class_name="w-[20%] h-[400px]",
+                ),
+                rx.box(
+                    rx.vstack(
+                        rx.box(
+                            rx.image(
+                                src=(f"http://10.0.1.235/ojs/public/journals/{Submission_recents.journal_id_1}/cover_issue_{Submission_recents.issue_id_1}_es_ES.jpg"),
+                                class_name="w-full h-full"
+                            ),
+                            class_name="front"
+                        ),
+                        rx.box(
+                            rx.vstack(
+                                rx.image(
+                                    src="varios.svg",
+                                    alt="Imagen de la seccion de usuarios",
+                                    width=Size.EXTRA_BIG.value,
+                                    height=Size.EXTRA_BIG.value,
+                                ),
+                                rx.text(
+                                    "4",
+                                    font_size=Size.EXTRA_BIG.value,
+                                    font_weight="bold",
+                                ),
+                                rx.text(
+                                    "Anuario de derecho 2020",
+                                    font_size=Size.EXTRA_DEFAULT.value,
+                                    font_weight="bold",
+                                ),
+                                class_name="flex items-center justify-center w-full h-full",
+                                bg=BackgroundColor.CAJAS.value,
+                                spacing=Size.BIG.value  
+                            ),
+                            class_name="back"
+                        ),
+                        class_name="flipper"
+                    ),
+                    class_name="flip-container",
                     margin_x=Size.SMALL.value
-                ),#? faltaria agregar Submission_recents.date_1 o .title_1 para mostrar la fecha o el titulo
-                rx.image(
-                    src=(f"http://10.0.1.235/ojs/public/journals/{Submission_recents.journal_id_2}/cover_issue_{Submission_recents.issue_id_2}_es_ES.jpg"),
-                    class_name="w-[20%] h-[400px]",
+                ),
+                rx.box(
+                    rx.vstack(
+                        rx.box(
+                            rx.image(
+                                src=(f"http://10.0.1.235/ojs/public/journals/{Submission_recents.journal_id_2}/cover_issue_{Submission_recents.issue_id_2}_es_ES.jpg"),
+                                class_name="w-full h-full"
+                            ),
+                            class_name="front"
+                        ),
+                        rx.box(
+                            rx.vstack(
+                                rx.image(
+                                    src="varios.svg",
+                                    alt="Imagen de la seccion de usuarios",
+                                    width=Size.EXTRA_BIG.value,
+                                    height=Size.EXTRA_BIG.value,
+                                ),
+                                rx.text(
+                                    "4",
+                                    font_size=Size.EXTRA_BIG.value,
+                                    font_weight="bold",
+                                ),
+                                rx.text(
+                                    "Anuario de derecho 2020",
+                                    font_size=Size.EXTRA_DEFAULT.value,
+                                    font_weight="bold",
+                                ),
+                                class_name="flex items-center justify-center w-full h-full",
+                                bg=BackgroundColor.CAJAS.value,
+                                spacing=Size.BIG.value  
+                            ),
+                            class_name="back"
+                        ),
+                        class_name="flipper"
+                    ),
+                    class_name="flip-container",
                     margin_x=Size.SMALL.value
-                ),#? faltaria agregar Submission_recents.date_2 o .title_2 para mostrar la fecha o el titulo
-                rx.image(
-                    src=(f"http://10.0.1.235/ojs/public/journals/{Submission_recents.journal_id_3}/cover_issue_{Submission_recents.issue_id_3}_es_ES.jpg"),
-                    class_name="w-[20%] h-[400px]",
+                ),
+                rx.box(
+                    rx.vstack(
+                        rx.box(
+                            rx.image(
+                                src=(f"http://10.0.1.235/ojs/public/journals/{Submission_recents.journal_id_3}/cover_issue_{Submission_recents.issue_id_3}_es_ES.jpg"),
+                                class_name="w-full h-full"
+                            ),
+                            class_name="front"
+                        ),
+                        rx.box(
+                            rx.vstack(
+                                rx.image(
+                                    src="varios.svg",
+                                    alt="Imagen de la seccion de usuarios",
+                                    width=Size.EXTRA_BIG.value,
+                                    height=Size.EXTRA_BIG.value,
+                                ),
+                                rx.text(
+                                    "4",
+                                    font_size=Size.EXTRA_BIG.value,
+                                    font_weight="bold",
+                                ),
+                                rx.text(
+                                    "Anuario de derecho 2020",
+                                    font_size=Size.EXTRA_DEFAULT.value,
+                                    font_weight="bold",
+                                ),
+                                class_name="flex items-center justify-center w-full h-full",
+                                bg=BackgroundColor.CAJAS.value,
+                                spacing=Size.BIG.value  
+                            ),
+                            class_name="back"
+                        ),
+                        class_name="flipper"
+                    ),
+                    class_name="flip-container",
                     margin_x=Size.SMALL.value
-                ),#? faltaria agregar Submission_recents.date_3 o .title_3 para mostrar la fecha o el titulo
+                ),
                 class_name="justify-center items-center w-full",
                 margin_top=Size.EXTRA_BIG.value,
             ),
@@ -479,6 +743,7 @@ def body() -> rx.Component:
                         class_name="justify-center items-center w-full",
                         margin_top=Size.EXTRA_BIG.value,
                     ),
+                    id="descargas-section",
                     padding_y=Size.GIGANTIC.value,
                     bg=f"{BackgroundColor.PATTERN_URL.value}, {BackgroundColor.GRADIENT.value}"
                 ),

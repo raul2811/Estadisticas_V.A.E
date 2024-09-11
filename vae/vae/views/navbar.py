@@ -38,8 +38,10 @@ def navbar() -> rx.Component:
                 width="100%",
             ),
             bg=BackgroundColor.DEFAULT.value,
-            position="sticky",
+            position="fixed",
+            width="100%",  
             padding_x=Size.MEDIUM.value,
             padding_y=Size.DEFAULT.value,
+            z_index=1000  # Asegúrate de que este valor sea mayor que el de cualquier otro elemento
         )
     )
